@@ -28,24 +28,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureMockMvc
 class ProductServiceApplicationTests {
 
-	@Container
-	public static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
-	
 	@Autowired
 	private MockMvc mockMvc;
 
-	@Autowired
-	private ObjectMapper objectMapper;
+	@Container
+	private static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
 
 	@DynamicPropertySource
 	static void setPropertiets(DynamicPropertyRegistry dynamicPropertyRegistry){
 		dynamicPropertyRegistry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
 	}
 
+	@Autowired
+	private ObjectMapper objectMapper;
+
 	@SuppressWarnings("null")
 	@Test
 	void shouldCreateProduct() throws JsonProcessingException, Exception {
-
 		mongoDBContainer.start();
 
 		Product p1 = new Product(null, "Eletric Grill", "Model AKAM-340", BigDecimal.valueOf(700));
@@ -54,9 +53,7 @@ class ProductServiceApplicationTests {
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/product")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(productRequestDTO))
-			).andExpect(status().isCreated());
-
-		
+			).andExpect(status().isCreated());		
 	}
 
     private ProductRequestDTO mapToProductRequestDTO(Product product){
