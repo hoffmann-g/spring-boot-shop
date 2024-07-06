@@ -8,7 +8,7 @@ This project is a microservice application with a REST API developed in Spring B
 The architecture of this project includes entities, resources, security filters, DTOs, and runs on MongoDB and MySQL databases. It is integrated with MockMVC for unit testing and Docker for easier development and deployment environments.
 
 
-# Techinologies used
+# Technologies used
 - Java
 - Spring Boot
 - JPA / Hibernate
